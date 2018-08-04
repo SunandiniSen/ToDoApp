@@ -105,3 +105,18 @@
     cursor: pointer;
     color: rgba(134, 41, 41);
 }
+
+.filter-clicked {
+    color: rgba(134, 41, 41);
+    font-weight: bold;
+}
+
+.clear-completed {
+    flex-grow: 2;
+    text-align: center;
+}
+
+.clear-completed:hover {
+    cursor: pointer;
+    font-weight: bold;
+}

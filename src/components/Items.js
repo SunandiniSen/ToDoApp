@@ -34,13 +34,8 @@ export default class Items extends React.Component {
     }
 
     cancel(index) {
-        // this.setState({
-        //     items: this.state.items.splice(index, 1)
-        // }, this.updateParent)
-
         this.setState(prevState => {
             prevState.items.splice(index, 1);
-            items: prevState
         }, this.updateParent)
     }
 
