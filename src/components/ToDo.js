@@ -14,15 +14,17 @@ export default class ToDo extends React.Component {
     }
 
     addItem(event) {
-        let newItem = {
-            val: this.refs.inputBox.value, 
-            active: false,
-            display: true
-        };
-        this.refs.inputBox.value = '';
-        this.setState(prevState => ({
-            items: [...prevState.items, newItem]
-        }))
+        if (this.refs.inputBox.value && this.refs.inputBox.value.trim().length > 0) {
+            let newItem = {
+                val: this.refs.inputBox.value, 
+                active: false,
+                display: true
+            };
+            this.refs.inputBox.value = '';
+            this.setState(prevState => ({
+                items: [...prevState.items, newItem]
+            }))
+        }
     }
 
     keyPress(e) {

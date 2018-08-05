@@ -1,47 +1,41 @@
-let path = require('path')
+const path = require('path');
 let webpack = require('webpack')
-let WebpackNotifierPlugin = require('webpack-notifier')
-let ExtractTextPlugin = require("extract-text-webpack-plugin")
-// let configJSON = require('./client.json')
-let fs = require("file-system")
+const ExtractTextPlugin = require('extract-text-webpack-plugin'); 
 
-const extractSass = new ExtractTextPlugin({
-  filename: 'styles.css',
-});
+const paths = {
+  SRC: path.resolve(__dirname, 'src')
+};
 
 module.exports = {
-  devtool: 'source-map',
-//   context: path.resolve(__dirname, 'src'),  
-  entry: {
-    bundle: ['./src/index'],
-  },
-
+  entry: path.join(paths.SRC, '/index'),
   output: {
     path: path.join(__dirname, 'public'),
     filename: '[name].js',
-    publicPath: '/'
   },
-
-  resolve: {
-    moduleExtensions: ['*', '.json', '.js', '.jsx'],
-    modules: [
-      'node_modules'
-    ]
-  },
-
-
-
+  
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin('style.bundle.css'), 
+  ],
+  
   module: {
-    noParse: /node_modules\/quill\/dist/,
     rules: [
       {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader',
+        ],
+      },
+      {
         test: /\.css$/,
-        // use: ExtractTextPlugin.extract("style-loader", "css-loader")
-        use: [ 'style-loader', 'css-loader' ]
+        loader: ExtractTextPlugin.extract({
+          use: 'css-loader',
+        }),
       },
       {
         test: /\.scss$/,
-        use: extractSass.extract({
+        use: ExtractTextPlugin.extract({
           use: [{
             loader: 'style-loader',
             options: {
@@ -60,32 +54,9 @@ module.exports = {
           }],
         }),
       },
-      {
-        test: /\.js$/,
-        exclude: /node-modules/,
-        use: ['babel-loader'],
-        include: path.join(__dirname, 'src')
-      },
-      { include: /\.json$/, use: ["json-loader"] },
-    ]
+    ],
   },
-  devServer: {
-    contentBase: path.join(__dirname, "public/"),
-    port: 3000,
-    publicPath: "http://localhost:3000/",
-    hotOnly: true
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      '__DEV__': true,
-      '__TEST__': false
-    }),
-    new WebpackNotifierPlugin(),
-    new ExtractTextPlugin("styles.css")
-  ],
-//   externals: {
-//     'ClientConfigs': JSON.stringify(configJSON)
-//   }
-}
+};
