@@ -23,5 +23,5 @@ $ npm run build
 Run
 
 ```bash
-$ npm run build
+$ npm run start
 ```
